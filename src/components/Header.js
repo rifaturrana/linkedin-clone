@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import React from "react";
 
 const Header = (props) => {
   return (
@@ -33,18 +32,21 @@ const Header = (props) => {
                 <span>My Network</span>
               </a>
             </NavList>
+
             <NavList>
               <a>
                 <img src="/images/nav-jobs.svg" alt="" />
                 <span>Jobs</span>
               </a>
             </NavList>
+
             <NavList>
               <a>
                 <img src="/images/nav-messaging.svg" alt="" />
-                <span>Messages</span>
+                <span>Messaging</span>
               </a>
             </NavList>
+
             <NavList>
               <a>
                 <img src="/images/nav-notifications.svg" alt="" />
@@ -58,10 +60,12 @@ const Header = (props) => {
                 <span>Me</span>
                 <img src="/images/down-icon.svg" alt="" />
               </a>
+
               <SignOut>
                 <a>Sign Out</a>
               </SignOut>
             </User>
+
             <Work>
               <a>
                 <img src="/images/nav-work.svg" alt="" />
@@ -88,6 +92,7 @@ const Container = styled.div`
   width: 100vw;
   z-index: 100;
 `;
+
 const Content = styled.div`
   display: flex;
   align-items: center;
@@ -95,17 +100,10 @@ const Content = styled.div`
   min-height: 100%;
   max-width: 1128px;
 `;
+
 const Logo = styled.span`
   margin-right: 8px;
   font-size: 0px;
-
-  & > a {
-    width: 135px;
-    height: 34px;
-    @media (max-width: 768px) {
-      padding: 0 5px;
-    }
-  }
 `;
 
 const Search = styled.div`
@@ -131,12 +129,14 @@ const Search = styled.div`
     }
   }
 `;
+
 const SearchIcon = styled.div`
   width: 40px;
   position: absolute;
   z-index: 1;
   top: 10px;
   left: 2px;
+  border-radius: 0 2px 2px 0;
   margin: 0;
   pointer-events: none;
   display: flex;
@@ -174,6 +174,7 @@ const NavListWrap = styled.ul`
     }
   }
 `;
+
 const NavList = styled.li`
   display: flex;
   align-items: center;
@@ -221,6 +222,7 @@ const SignOut = styled.div`
   text-align: center;
   display: none;
 `;
+
 const User = styled(NavList)`
   a > svg {
     width: 24px;
@@ -237,12 +239,13 @@ const User = styled(NavList)`
   }
   &:hover {
     ${SignOut} {
-      display: flex;
       align-items: center;
+      display: flex;
       justify-content: center;
     }
   }
 `;
+
 const Work = styled(User)`
   border-left: 1px solid rgba(0, 0, 0, 0.08);
 `;

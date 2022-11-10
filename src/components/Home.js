@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import Leftside from "./Leftside";
-import Rightside from "./Rightside";
 import Main from "./Main";
+import Rightside from "./Rightside";
+
 const Home = (props) => {
   return (
     <Container>
@@ -27,12 +28,14 @@ const Container = styled.div`
   padding-top: 52px;
   max-width: 100%;
 `;
+
 const Content = styled.div`
   max-width: 1128px;
   margin-left: auto;
   margin-right: auto;
 `;
-const Section = styled.div`
+
+const Section = styled.section`
   min-height: 50px;
   padding: 16px 0;
   box-sizing: content-box;
@@ -42,8 +45,9 @@ const Section = styled.div`
   justify-content: center;
   h5 {
     color: #0a66c2;
+    font-size: 14px;
     a {
-      font-size: 14px;
+      font-weight: 700;
     }
   }
   p {
@@ -56,13 +60,14 @@ const Section = styled.div`
     padding: 0 5px;
   }
 `;
+
 const Layout = styled.div`
   display: grid;
   grid-template-areas: "leftside main rightside";
   grid-template-columns: minmax(0, 5fr) minmax(0, 12fr) minmax(300px, 7fr);
   column-gap: 25px;
   row-gap: 25px;
-  /* grid-template-rows: auto; */
+  /* grid-template-row: auto; */
   margin: 25px 0;
   @media (max-width: 768px) {
     display: flex;
@@ -70,4 +75,5 @@ const Layout = styled.div`
     padding: 0 5px;
   }
 `;
+
 export default Home;
