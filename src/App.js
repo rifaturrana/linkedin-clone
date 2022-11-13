@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Header from "./components/Header";
@@ -14,15 +14,19 @@ function App(props) {
   return (
     <div className="App">
       <Router>
-        <Switch>
-          <Route exact path="/">
-            <Login />
-          </Route>
-          <Route path="/home">
-            <Header />
-            <Home />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route exact path="/" element={<Login />} />
+          <Route
+            exact
+            path="/home"
+            element={
+              <>
+                <Header />
+                <Home />
+              </>
+            }
+          />
+        </Routes>
       </Router>
     </div>
   );
