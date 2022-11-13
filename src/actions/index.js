@@ -1,19 +1,33 @@
 import { auth, provider, storage } from "../firebase";
-import db from "../firebase";
-import { SET_USER } from "./actionType";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES } from "./actionType";
+
+import { db } from "../firebase";
 
 export const setUser = (payload) => ({
   type: SET_USER,
   user: payload,
 });
 
+export const setLoading = (status) => ({
+  type: SET_LOADING_STATUS,
+  status: status,
+});
+
+export function getArticles(payload, id) {
+  return {
+    type: GET_ARTICLES,
+    payload: payload,
+  };
+}
+
 export function signInAPI() {
   return (dispatch) => {
     auth
       .signInWithPopup(provider)
       .then((payload) => {
-        console.log(payload.user);
         dispatch(setUser(payload.user));
+        // console.log(payload.user);
       })
       .catch((error) => alert(error.message));
   };
@@ -34,17 +48,18 @@ export function signOutAPI() {
     auth
       .signOut()
       .then(() => {
-        dispatch(setUser(null));
+        dispatch(setUser());
       })
       .catch((error) => {
-        alert(error.message);
+        console.log(error.message);
       });
   };
 }
 
 export function postArticleAPI(payload) {
   return (dispatch) => {
-    if (payload.image !== "") {
+    dispatch(setLoading(true));
+    if (payload.image != "") {
       const upload = storage
         .ref(`images/${payload.image.name}`)
         .put(payload.image);
@@ -61,14 +76,12 @@ export function postArticleAPI(payload) {
         (error) => console.log(error.code),
         async () => {
           const downloadURL = await upload.snapshot.ref.getDownloadURL();
-          console.log(downloadURL);
-          payload.image = downloadURL;
-          console.log(payload);
-          db.collection("articles").add({
+
+          const docRef = addDoc(collection(db, "articles"), {
             actor: {
               description: payload.user.email,
               title: payload.user.displayName,
-              date: payload.timestamp,
+              date: Timestamp.now(),
               image: payload.user.photoURL,
             },
             video: payload.video,
@@ -76,8 +89,39 @@ export function postArticleAPI(payload) {
             comments: 0,
             description: payload.description,
           });
+          console.log("Document written with ID: ", docRef.id);
+          dispatch(setLoading(false));
         }
       );
+    } else if (payload.video) {
+      const docRef = addDoc(collection(db, "articles"), {
+        actor: {
+          description: payload.user.email,
+          title: payload.user.displayName,
+          date: Timestamp.now(),
+          image: payload.user.photoURL,
+        },
+        video: payload.video,
+        sharedImg: "",
+        comments: 0,
+        description: payload.description,
+      });
+      console.log("Document written with ID: ", docRef.id);
+      dispatch(setLoading(false));
     }
+  };
+}
+
+export function getArticlesAPI() {
+  return (dispatch) => {
+    let payload;
+
+    db.collection("articles")
+      .orderBy("actor.date", "desc")
+      .onSnapshot((snapshot) => {
+        payload = snapshot.docs.map((doc) => doc.data());
+        console.log(payload);
+        dispatch(getArticles(payload));
+      });
   };
 }

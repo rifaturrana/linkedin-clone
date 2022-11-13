@@ -2,11 +2,12 @@ import { useState } from "react";
 import styled from "styled-components";
 import ReactPlayer from "react-player";
 import { connect } from "react-redux";
-
+import firebase from "firebase/compat/app";
+import { postArticleAPI } from "../actions";
 const PostModal = (props) => {
   const [editorText, setEditorText] = useState("");
   const [shareImage, setShareImage] = useState("");
-  const [vedioLink, setVedioLink] = useState("");
+  const [videoLink, setvideoLink] = useState("");
   const [assetArea, setAssetArea] = useState("");
 
   const handleChange = (e) => {
@@ -21,14 +22,32 @@ const PostModal = (props) => {
 
   const switchAssetArea = (area) => {
     setShareImage("");
-    setVedioLink("");
+    setvideoLink("");
     setAssetArea(area);
   };
 
+  const postArticle = (e) => {
+    console.log("Post maloon");
+    e.preventDefault();
+    if (e.target !== e.currentTarget) {
+      console.log("hello if");
+      return;
+    }
+    const payload = {
+      image: shareImage,
+      video: videoLink,
+      user: props.user,
+      description: editorText,
+      timeStamp: firebase.firestore.Timestamp.now(),
+    };
+    props.postArticle(payload);
+    console.log("Uploaded");
+    reset(e);
+  };
   const reset = (e) => {
     setEditorText("");
     setShareImage("");
-    setVedioLink("");
+    setvideoLink("");
     setAssetArea("");
     props.handleClick(e);
   };
@@ -81,12 +100,12 @@ const PostModal = (props) => {
                     <>
                       <input
                         type="text"
-                        placeholder="Please input a vedio link"
-                        value={vedioLink}
-                        onChange={(e) => setVedioLink(e.target.value)}
+                        placeholder="Please input a video link"
+                        value={videoLink}
+                        onChange={(e) => setvideoLink(e.target.value)}
                       />
-                      {vedioLink && (
-                        <ReactPlayer width={"100%"} url={vedioLink} />
+                      {videoLink && (
+                        <ReactPlayer width={"100%"} url={videoLink} />
                       )}
                     </>
                   )
@@ -108,7 +127,12 @@ const PostModal = (props) => {
                   Anyone
                 </AssetButton>
               </ShareComment>
-              <PostButton disabled={!editorText ? true : false}>
+              <PostButton
+                disabled={!editorText ? true : false}
+                onClick={(e) => {
+                  postArticle(e);
+                }}
+              >
                 Post
               </PostButton>
             </ShareCreation>
@@ -266,6 +290,8 @@ const mapStateToProps = (state) => {
     user: state.userState.user,
   };
 };
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  postArticle: (payload) => dispatch(postArticleAPI(payload)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostModal);
