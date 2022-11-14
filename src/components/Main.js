@@ -294,6 +294,8 @@ const SocialCounts = styled.ul`
   align-items: flex-start;
   overflow: auto;
   margin: 0 16px;
+  border: none;
+  background-color: white;
   padding: 8px 0;
   border-bottom: 1px solid #e9e5df;
   list-style: none;
@@ -316,6 +318,8 @@ const SocialActions = styled.div`
   button {
     display: inline-flex;
     align-items: center;
+    border: none;
+    background-color: white;
     padding: 8px;
     color: #0a66c2;
     @media (min-width: 768px) {

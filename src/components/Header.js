@@ -251,6 +251,15 @@ const User = styled(NavList)`
       justify-content: center;
     }
   }
+  @media (max-width: 768px) {
+    &:hover {
+      ${SignOut} {
+        position: absolute;
+        top: -40px;
+        left: 330px;
+      }
+    }
+  }
 `;
 
 const Work = styled(User)`
